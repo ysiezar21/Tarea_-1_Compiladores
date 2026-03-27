@@ -1,0 +1,124 @@
+<programa>            ::= <funcion_lista> <main>
+
+<funcion_lista>       ::= <funcion>
+                                  | <funcion_lista> <funcion>
+
+<main>                ::= empty ~ __main__ <| |> <bloque>
+
+<funcion>             ::= <tipo_retorno> ~ <id> ~ <| <param_lista> |> <bloque>
+                                  | <tipo_retorno> ~ <id> ~ <| |> <bloque>
+
+<tipo_retorno>        ::= int | float | char | bool
+
+<param_lista>         ::= <param> | <param_lista> , <param>
+
+<param>               ::= <tipo> ~ <id> | <tipo_arr> ~ <id>
+
+<tipo>                ::= int | float | bool | char | string
+
+<tipo_arr>            ::= int | float
+
+<bloque>              ::= |: <sentencia_lista> :| | |: :|
+
+<sentencia_lista>     ::= <sentencia> | <sentencia_lista> <sentencia>
+
+<sentencia>           ::= <decl> ! | <decl_arr> ! | <asig> ! | <expr> ! | <control> | <return_stmt> !
+                                 | break ! | <io_stmt> ! | <bloque> | <comentario>
+
+<decl>                ::= <tipo> ~ <id> | <tipo> ~ <id> <- <expr>
+
+<decl_arr>            ::= <tipo_arr> ~ <id> << int_lit >> << int_lit >> | <tipo_arr> ~ <id> << int_lit >> << int_lit >> <- |: <arr_init> :|
+
+<arr_init>            ::= <expr> | <arr_init> , <expr>
+
+<asig>                ::= <id> <- <expr> | <arr_access> <- <expr>
+
+<arr_access>          ::= <id> << <expr> >> << <expr> >>
+
+<control>             ::= <if_stmt> | <do_while> | <switch_stmt>
+
+<if_stmt>             ::= if ~ <| <expr> |> <bloque>
+                              | if ~ <| <expr> |> <bloque> else ~ <bloque>
+                              | if ~ <| <expr> |> <bloque> else ~ <if_stmt>
+
+<do_while>            ::= do ~ <bloque> while ~ <| <expr> |> !
+
+<switch_stmt>         ::= switch ~ <| <expr> |> |: <case_lista> :|
+
+<case_lista>          ::= <case_item> | <case_lista> <case_item>
+
+<case_item>           ::= case ~ <literal> : <sentencia_lista> | default : <sentencia_lista>
+
+<return_stmt>         ::= return ~ <expr>
+
+<io_stmt>             ::= cin ~ <id> | cout ~ <expr>
+
+<expr>                ::= <expr_log>
+
+<expr_log>            ::= <expr_log> @ <expr_rel> | <expr_log> # <expr_rel> | <expr_rel>
+
+<expr_rel>            ::= equal <| <expr_arit> , <expr_arit> |>
+                        	| n_equal <| <expr_arit> , <expr_arit> |>
+                        	| less_t <| <expr_arit> , <expr_arit> |>
+                        	| less_te <| <expr_arit> , <expr_arit> |>
+                        	| greather_t <| <expr_arit> , <expr_arit> |>
+                        	| greather_te <| <expr_arit> , <expr_arit> |>
+                        	| equal <| <expr_log> , <expr_log> |>
+                        	| n_equal <| <expr_log> , <expr_log> |>
+                        	| <expr_arit>
+
+<expr_arit>           ::= <expr_arit> + <term> | <expr_arit> - <term> | <term>
+
+<term>                ::= <term> * <potencia> | <term> / <potencia> | <term> % <potencia> | <potencia>
+
+<potencia>            ::= <unario> ^ <potencia> | <unario>
+
+<unario>              ::= - <primario> | ++ <id> | -- <id> | $ <primario> | <primario>
+
+<primario>            ::= <literal> | <id> | <arr_access> | <llamada> | <| <expr> |>
+
+<llamada>             ::= <id> ~ <| <arg_lista> |> | <id> ~ <| |>
+
+<arg_lista>           ::= <expr> | <arg_lista> , <expr>
+
+<literal>             ::= int_lit | float_lit | exp_lit | frac_lit | bool_lit | char_lit | string_lit
+
+<comentario>          ::= ¡¡ <linea_texto> | {- <bloque_texto> -}
+
+<linea_texto>         ::= char_lit* \s
+
+<bloque_texto>        ::= <línea_texto>+
+
+id                    ::= letra_sub <id_resto> | letra_sub
+
+<id_resto>            ::= <id_char> | <id_resto> <id_char>
+
+<id_char>             ::= letra_sub | digito
+
+letra_sub             ::= [a-zA-Z_]
+
+digito                ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+digito_no_cero        ::= 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+int_lit               ::= digito | int_lit digito
+
+float_lit             ::= int_lit . int_lit
+
+exp_lit               ::= int_lit e int_lit_pos
+
+int_lit_pos           ::= digito_no_cero | int_lit_pos digito
+
+frac_lit              ::= int_lit frac_sep int_lit
+
+frac_sep              ::= /
+
+bool_lit              ::= true | false
+
+char_lit              ::= ' letra_sub ' | ' digito '
+
+string_lit            ::= " <str_contenido> " | ""
+
+<str_contenido>       ::= <str_char> | <str_contenido> <str_char>
+
+<str_char>            ::= [^”\s]
